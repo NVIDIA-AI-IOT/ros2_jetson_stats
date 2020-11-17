@@ -1,4 +1,5 @@
 # ROS 2 jetson_stats
+[NVIDIA Developer Blog](https://developer.nvidia.com/blog/implementing-robotics-applications-with-ros-2-and-ai-on-jetson-platform-2/)
 
 ## ROS2 wrapper for Jetson Stats (jtop)
 This repository takes inspiration from [ROS-jtop](https://github.com/rbonghi/ros_jetson_stats) and creates package for ros2 (currently tested on eloquent)
@@ -11,7 +12,7 @@ ROS2 Eloquent [Install Guide](https://index.ros.org/doc/ros2/Installation/Eloque
 ```sudo -H pip install -U jetson-stats```
 2. Clone repo in ros2 workspace
 ``` cd dev_ws/src``` <br/>
-``` git clone https://gitlab-master.nvidia.com/ameykulkarni/ros2_jtop.git``` <br/>
+``` git clone https://github.com/NVIDIA-AI-IOT/ros2_jetson_stats.git``` <br/>
 3. Build
 ``` sudo rosdep install --from-paths ros2_jtop --ignore-src --rosdistro eloquent -y ``` <br/>
 ``` colcon build ``` <br/>
@@ -70,3 +71,8 @@ If you want to change frequency of JTOP messages, do following:<br/>
     Open new terminal <br/>
     ``` sudo . install/local_setup.bash ``` <br/>
     ``` ros2 service call /jtop/jetson_clocks jtop_services/srv/JetsonClocks "{status: True}"``` <br/>
+
+## Other related ROS 2 projects
+- [ros2_torch_trt](https://github.com/NVIDIA-AI-IOT/ros2_torch_trt) : ROS2 Real Time Classification and Detection <br/>
+- [ros2_deepstream](https://github.com/NVIDIA-AI-IOT/ros2_deepstream) : ROS2 nodes for DeepStream applications <br/>
+- [ros2_trt_pose](https://github.com/NVIDIA-AI-IOT/ros2_trt_pose) : ROS 2 package for "trt_pose": real-time human pose estimation on NVIDIA Jetson Platform <br/>
