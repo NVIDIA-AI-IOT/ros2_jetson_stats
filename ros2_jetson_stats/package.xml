@@ -1,44 +1,47 @@
-<!--# Copyright (c) 2019-2020, NVIDIA CORPORATION. All rights reserved.-->
-<!--# Permission is hereby granted, free of charge, to any person obtaining-->
-<!--# a copy of this software and associated documentation files (the "Software"),-->
-<!--# to deal in the Software without restriction, including without limitation-->
-<!--# the rights to use, copy, modify, merge, publish, distribute, sublicense,-->
-<!--# and/or sell copies of the Software, and to permit persons to whom the-->
-<!--# Software is furnished to do so, subject to the following conditions:-->
-<!--# The above copyright notice and this permission notice shall be included-->
-<!--# in all copies or substantial portions of the Software.-->
-<!--# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,-->
-<!--# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR-->
-<!--# PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,-->
-<!--# DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,-->
-<!--# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.-->
-
 <?xml version="1.0"?>
+<!--
+  Copyright (c) 2019-2020, NVIDIA CORPORATION.
+  All rights reserved.
+  Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this software and associated documentation files (the "Software"),
+  to deal in the Software without restriction, including without limitation
+  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+  and/or sell copies of the Software, and to permit persons to whom the
+  Software is furnished to do so, subject to the following conditions:
+  The above copyright notice and this permission notice shall be included
+  in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>ros2_jetson_stats</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <version>3.1.0</version>
+  <description>jetson_stats bridge for ROS2</description>
+  
   <maintainer email="ameykulkarni@nvidia.com">nvidia</maintainer>
-  <license>TODO: License declaration</license>
+  <license>MIT</license>
 
-  <build_depend>rosidl_default_generators</build_depend>
+  <author email="ameykulkarni@nvidia.com">Amey Kulkarni</author>
+  <author email="rbonghi@nvidia.com">Raffaello Bonghi</author>
 
-  <exec_depend>rclpy</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
-  <exec_depend>diagnostic_msgs</exec_depend>
-  <exec_depend>jtop_services</exec_depend>
-  <exec_depend>rosidl_default_runtime</exec_depend>
+  <url type="repository">https://github.com/NVIDIA-AI-IOT/ros2_jetson_stats.git</url>
+  <url type="bugtracker">https://github.com/NVIDIA-AI-IOT/ros2_jetson_stats.git/issues</url>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
 
-
-
-  <member_of_group>rosidl_interface_packages</member_of_group>
-
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>diagnostic_msgs</exec_depend>
+  <exec_depend>jtop_services</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>

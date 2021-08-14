@@ -14,24 +14,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from setuptools import setup
+# Launch command
+from os import path
+from glob import glob
 
 package_name = 'ros2_jetson_stats'
 
+here = path.abspath(path.dirname(__file__))
+with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
+    requirements = f.read().splitlines()
+
 setup(
     name=package_name,
-    version='0.0.0',
+    version='3.1.0',
     packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name, ['requirements.txt']),
+        (path.join('share', package_name), glob('launch/*.py'))
     ],
-    install_requires=['setuptools'],
+    install_requires=requirements,
     zip_safe=True,
     maintainer='nvidia-ai-iot',
-    maintainer_email='ak-nv',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer_email='ameykulkarni@nvidia.com',
+    description='jetson_stats bridge for ROS2',
+    license='MIT',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
