@@ -18,7 +18,7 @@ from setuptools import setup
 from os import path
 from glob import glob
 
-package_name = 'ros2_jetson_stats'
+package_name = 'jetson_stats_wrapper'
 
 here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
@@ -44,7 +44,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-                'ros2_jtop = ros2_jetson_stats.ros2_jtop_node:main',
+                'jtop = jetson_stats_wrapper.jtop_node:main',
         ],
     },
 )

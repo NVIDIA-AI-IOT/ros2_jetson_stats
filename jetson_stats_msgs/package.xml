@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>jtop_services</name>
+  <name>jetson_stats_msgs</name>
   <version>3.1.0</version>
   <description>jetson_stats service messages for ROS2</description>
 
@@ -30,8 +30,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
   <author email="ameykulkarni@nvidia.com">Amey Kulkarni</author>
   <author email="rbonghi@nvidia.com">Raffaello Bonghi</author>
 
+  <url type="repository">https://github.com/NVIDIA-AI-IOT/ros2_jetson_stats.git</url>
+  <url type="bugtracker">https://github.com/NVIDIA-AI-IOT/ros2_jetson_stats.git/issues</url>
+
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <build_depend>rosidl_default_generators</build_depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
   <member_of_group>rosidl_interface_packages</member_of_group>
 
   <test_depend>ament_lint_auto</test_depend>

@@ -19,9 +19,9 @@ from std_msgs.msg import String
 from diagnostic_msgs.msg import DiagnosticArray, DiagnosticStatus, KeyValue
 import jtop
 
-from jtop_services.srv import NVPModel, JetsonClocks, Fan
+from jetson_stats_msgs.srv import NVPModel, JetsonClocks, Fan
 
-from ros2_jetson_stats.utils import (
+from jetson_stats_wrapper.utils import (
     other_status,
     board_status,
     disk_status,
@@ -38,7 +38,7 @@ from ros2_jetson_stats.utils import (
 class JTOPPublisher(Node):
 
     def __init__(self):
-        super().__init__('jtop_publisher')
+        super().__init__('jtop')
         self.publisher_ = self.create_publisher(DiagnosticArray, 'diagnostics', 1)
         # Create Services
         self.fan_srv = self.create_service(Fan, '/jtop/fan', self.fan_service)
