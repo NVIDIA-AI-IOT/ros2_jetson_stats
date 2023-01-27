@@ -20,10 +20,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>ros2_jetson_stats</name>
+  <name>jetson_stats_wrapper</name>
   <version>3.1.0</version>
-  <description>jetson_stats wrapper for ROS2</description>
-
+  <description>jetson_stats bridge for ROS2</description>
+  
   <maintainer email="ameykulkarni@nvidia.com">nvidia</maintainer>
   <license>MIT</license>
 
@@ -33,11 +33,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
   <url type="repository">https://github.com/NVIDIA-AI-IOT/ros2_jetson_stats.git</url>
   <url type="bugtracker">https://github.com/NVIDIA-AI-IOT/ros2_jetson_stats.git/issues</url>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
 
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>diagnostic_msgs</exec_depend>
   <exec_depend>jetson_stats_msgs</exec_depend>
-  <exec_depend>jetson_stats_wrapper</exec_depend>
+
   <export>
-    <build_type>ament_cmake</build_type>
+    <build_type>ament_python</build_type>
   </export>
 </package>
