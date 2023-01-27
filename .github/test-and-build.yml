@@ -1,0 +1,39 @@
+name: CI & CD
+
+# Reference:
+# https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#on
+on: [push, pull_request]
+
+env:
+  docker_image_name: rbonghi/ros2_jetson_stats
+
+
+jobs:
+  docker:
+    name: "Build Docker image develop"
+    runs-on: ubuntu-latest
+    steps:
+    # https://github.com/docker/build-push-action/blob/master/docs/advanced/tags-labels.md
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ env.docker_image_name }}
+        # generate Docker tags based on the following events/attributes
+        tags: |
+          type=ref,event=branch
+          type=semver,pattern={{version}}
+          type=ref,event=tag
+          type=ref,event=pr
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    - name: Build and push
+      id: docker_build
+      uses: docker/build-push-action@v3.3.0
+      with:
+        push: false
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        platforms: linux/arm64, linux/amd64
