@@ -290,12 +290,12 @@ def power_status(hardware, total, power):
 
     Fields:
     * Two power dictionaries:
-    * total - The total power estimated is not available of the NVIDIA Jetson power comsumption
-    * power - A dictionary with all power comsumption
+    * total - The total power estimated is not available of the NVIDIA Jetson power consumption
+    * power - A dictionary with all power consumption
 
-    For each power comsumption there are two fields:
-    * avg - Average power consumption in milliwatts
-    * cur - Current power consumption in milliwatts
+    For each power consumption there are two fields:
+    * avg - Average power consumption in milliwatt
+    * cur - Current power consumption in milliwatt
     """
     values = []
     # Make list power

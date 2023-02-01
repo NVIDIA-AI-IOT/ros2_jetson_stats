@@ -22,7 +22,7 @@ ENV ROS_ROOT=/opt/ros/${ROS_DISTRO}
 # https://answers.ros.org/question/355702/colcon-test-failed-in-python-package/
 RUN apt-get update && \
     apt-get install -y python3-pip && \
-    pip install --upgrade pydocstyle && \
+    pip install pydocstyle==6.1.1 && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and build nanosaur_ws
