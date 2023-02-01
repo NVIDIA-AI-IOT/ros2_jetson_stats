@@ -19,6 +19,12 @@ FROM ros:foxy-ros-base
 ENV ROS_DISTRO=foxy
 ENV ROS_ROOT=/opt/ros/${ROS_DISTRO}
 
+# https://answers.ros.org/question/355702/colcon-test-failed-in-python-package/
+RUN apt-get update && \
+    apt-get install -y python3-pip && \
+    pip install --upgrade pydocstyle && \
+    rm -rf /var/lib/apt/lists/*
+
 # Download and build nanosaur_ws
 ENV ROS_WS /opt/ros_ws
 

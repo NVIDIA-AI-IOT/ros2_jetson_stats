@@ -26,21 +26,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
   <maintainer email="ameykulkarni@nvidia.com">nvidia</maintainer>
   <license>MIT</license>
-  
-  <author email="ameykulkarni@nvidia.com">Amey Kulkarni</author>
-  <author email="rbonghi@nvidia.com">Raffaello Bonghi</author>
 
   <url type="repository">https://github.com/NVIDIA-AI-IOT/ros2_jetson_stats.git</url>
   <url type="bugtracker">https://github.com/NVIDIA-AI-IOT/ros2_jetson_stats.git/issues</url>
+
+  <author email="ameykulkarni@nvidia.com">Amey Kulkarni</author>
+  <author email="rbonghi@nvidia.com">Raffaello Bonghi</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <build_depend>rosidl_default_generators</build_depend>
   <exec_depend>rosidl_default_runtime</exec_depend>
-  <member_of_group>rosidl_interface_packages</member_of_group>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
+
+  <member_of_group>rosidl_interface_packages</member_of_group>
 
   <export>
     <build_type>ament_cmake</build_type>

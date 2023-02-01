@@ -1,34 +1,22 @@
-# -*- coding: UTF-8 -*-
-# Copyright (C) 2020, Raffaello Bonghi <raffaello@rnext.it>
-# All rights reserved
+# Copyright (c) 2020, Raffaello Bonghi <raffaello@rnext.it>
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
 #
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. Neither the name of the copyright holder nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
-# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
-# BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-# HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
-# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-# EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
-import rclpy
-from copy import deepcopy
 from diagnostic_msgs.msg import DiagnosticStatus, KeyValue
 
 
@@ -44,9 +32,7 @@ def size_min(num, divider=1.0, n=0, start=''):
 
 
 def strfdelta(tdelta, fmt):
-    """ Print delta time
-        - https://stackoverflow.com/questions/8906926/formatting-python-timedelta-objects
-    """
+    # https://stackoverflow.com/questions/8906926/formatting-python-timedelta-objects
     d = {"days": tdelta.days}
     d["hours"], rem = divmod(tdelta.seconds, 3600)
     d["minutes"], d["seconds"] = divmod(rem, 60)
@@ -54,15 +40,14 @@ def strfdelta(tdelta, fmt):
 
 
 def other_status(hardware, jetson, version):
-    """
-    Generic information about jetson_clock and nvpmodel
-    """
+    # Generic information about jetson_clock and nvpmodel
     values = []
     nvpmodel = jetson.nvpmodel
     text = ""
     if nvpmodel is not None:
         nvp_name = nvpmodel.name.replace('MODE_', '').replace('_', ' ')
-        values += [KeyValue(key="NV Power-ID" , value=str(nvpmodel.id)), KeyValue(key="NV Power-Mode" , value=str(nvp_name))]
+        values += [KeyValue(key="NV Power-ID", value=str(nvpmodel.id)),
+                   KeyValue(key="NV Power-Mode", value=str(nvp_name))]
         text += "NV Power[{id}] {name}".format(id=nvpmodel.id, name=nvp_name)
     jc = jetson.jetson_clocks
     if jetson.jetson_clocks is not None:
@@ -73,15 +58,16 @@ def other_status(hardware, jetson, version):
         else:
             level = DiagnosticStatus.ERROR
         # Show if JetsonClock is enabled or not
-        values += [KeyValue(key="jetson_clocks" , value=str(jc.status))]
-        values += [KeyValue(key="jetson_clocks on boot" , value=str(jc.boot))]
+        values += [KeyValue(key="jetson_clocks", value=str(jc.status))]
+        values += [KeyValue(key="jetson_clocks on boot", value=str(jc.boot))]
         text += " - JC {status}".format(status=jc.status)
     # Uptime
-    uptime_string = strfdelta(jetson.uptime, "{days} days {hours}:{minutes}:{seconds}")
-    values += [KeyValue(key="Up Time" , value=str(uptime_string))]
+    uptime_string = strfdelta(
+        jetson.uptime, "{days} days {hours}:{minutes}:{seconds}")
+    values += [KeyValue(key="Up Time", value=str(uptime_string))]
     # Jtop version
-    values += [KeyValue(key="interval" , value=str(jetson.interval))]
-    values += [KeyValue(key="jtop" , value=str(version))]
+    values += [KeyValue(key="interval", value=str(jetson.interval))]
+    values += [KeyValue(key="jtop", value=str(version))]
     # Make board diagnostic status
     status = DiagnosticStatus(
         level=level,
@@ -93,9 +79,7 @@ def other_status(hardware, jetson, version):
 
 
 def board_status(hardware, board, dgtype):
-    """
-    Board information and libraries installed
-    """
+    # Board information and libraries installed
     values = []
     for key, value in board['hardware'].items():
         values += [KeyValue(key=key, value=str(value))]
@@ -111,9 +95,7 @@ def board_status(hardware, board, dgtype):
 
 
 def disk_status(hardware, disk, dgtype):
-    """
-    Status disk
-    """
+    # Status disk
     value = int(float(disk['used']) / float(disk['total']) * 100.0)
     if value >= 90:
         level = DiagnosticStatus.ERROR
@@ -136,7 +118,7 @@ def disk_status(hardware, disk, dgtype):
 
 def cpu_status(hardware, name, cpu):
     """
-    Decode a cpu stats
+    Decode a cpu stats.
 
     Fields:
     * min_freq - Minimum frequency in kHz
@@ -160,7 +142,8 @@ def cpu_status(hardware, name, cpu):
                 KeyValue(key="Freq", value=str(cpu['frq'])),
                 KeyValue(key="Unit", value="khz")]
             if 'governor' in cpu:
-                values += [KeyValue(key="Governor", value=str(cpu['governor']))]
+                values += [KeyValue(key="Governor",
+                                    value=str(cpu['governor']))]
             if 'model' in cpu:
                 values += [KeyValue(key="Model", value=str(cpu['model']))]
     # Make Diagnostic message
@@ -171,9 +154,11 @@ def cpu_status(hardware, name, cpu):
         values=values)
     return d_cpu
 
+
 def gpu_status(hardware, gpu):
     """
-    Decode and build a diagnostic status message
+    Decode and build a diagnostic status message.
+
     Fields:
     * min_freq - Minimum frequency in kHz
     * max_freq - Maximum frequency in kHz
@@ -184,16 +169,15 @@ def gpu_status(hardware, gpu):
         name='jetson_stats gpu',
         message='{val}%'.format(val=gpu['val']),
         hardware_id=hardware,
-        #values=[KeyValue('Val', '{val}%'.format(val=gpu['val'])), KeyValue("Freq", "{frq}".format(frq=gpu['frq'])), KeyValue("Unit", "khz")])
-        values=[KeyValue(key = 'val', value=str(gpu['val'])),
-            KeyValue(key='Freq', value=str(gpu['frq'])),
-            KeyValue(key='Unit', value="khz")])
+        values=[KeyValue(key='val', value=str(gpu['val'])),
+                KeyValue(key='Freq', value=str(gpu['frq'])),
+                KeyValue(key='Unit', value="khz")])
     return d_gpu
 
 
 def fan_status(hardware, fan, dgtype):
     """
-    Fan speed and type of control
+    Fan speed and type of control.
 
     Fields:
     * auto - boolean with fan control.
@@ -201,7 +185,8 @@ def fan_status(hardware, fan, dgtype):
         * False = Automatic speed control disabled
     * speed - Speed set. Value between [0, 100] (float)
     * measure - Speed measured. Value between [0, 100] (float)
-    * rpm - Revolution Per Minute. This number can be 0 if the hardware does not implement this feature
+    * rpm - Revolution Per Minute.
+            This number can be 0 if the hardware does not implement this feature
     * mode - Mode selected for your fan
     """
     ctrl = "Ta" if fan.auto else "Tm"
@@ -212,20 +197,21 @@ def fan_status(hardware, fan, dgtype):
     # Make fan diagnostic status
     d_fan = DiagnosticStatus(
         name='jetson_stats {type} fan'.format(type=dgtype),
-        message='speed={speed}% {label}'.format(speed=fan['measure'], label=label),
+        message='speed={speed}% {label}'.format(
+            speed=fan['measure'], label=label),
         hardware_id=hardware,
         values=[
             KeyValue(key='Mode', value=str(fan['mode'])),
             KeyValue(key="Speed", value=str(fan['speed'])),
             KeyValue(key="Measure", value=str(fan['measure'])),
-            KeyValue(key="Automatic",value=str(fan['auto'])),
+            KeyValue(key="Automatic", value=str(fan['auto'])),
             KeyValue(key="RPM", value=str(fan['rpm']))])
     return d_fan
 
 
 def ram_status(hardware, ram, dgtype):
     """
-    Make a RAM diagnostic status message
+    Make a RAM diagnostic status message.
 
     Fields:
     * use - status ram used
@@ -238,7 +224,8 @@ def ram_status(hardware, ram, dgtype):
         * unit - Unit size lfb
     """
     lfb_status = ram['lfb']
-    tot_ram, divider, unit_name = size_min(ram.get('tot', 0), start=ram.get('unit', 'M'))
+    tot_ram, divider, unit_name = size_min(
+        ram.get('tot', 0), start=ram.get('unit', 'M'))
     # Make ram diagnostic status
     d_ram = DiagnosticStatus(
         name='jetson_stats {type} ram'.format(type=dgtype),
@@ -263,7 +250,7 @@ def ram_status(hardware, ram, dgtype):
 
 def swap_status(hardware, swap, dgtype):
     """
-    Make a swap diagnostic message
+    Make a swap diagnostic message.
 
     Fields:
     * use - Amount of SWAP in use
@@ -274,7 +261,8 @@ def swap_status(hardware, swap, dgtype):
         * unit - Unit cache size
     """
     swap_cached = swap.get('cached', {})
-    tot_swap, divider, unit = size_min(swap.get('tot', 0), start=swap.get('unit', 'M'))
+    tot_swap, divider, unit = size_min(
+        swap.get('tot', 0), start=swap.get('unit', 'M'))
     message = '{use}{unit_swap}B/{tot}{unit_swap}B (cached {size}{unit}B)'.format(
         use=swap.get('use', 0) / divider,
         tot=tot_swap,
@@ -290,14 +278,15 @@ def swap_status(hardware, swap, dgtype):
             KeyValue(key="Use", value=str(swap.get('use', 0))),
             KeyValue(key="Total", value=str(swap.get('tot', 0))),
             KeyValue(key="Unit", value=str(swap.get('unit', 'M'))),
-            KeyValue(key="Cached-Size", value=str(swap_cached.get('size', '0'))),
+            KeyValue(key="Cached-Size",
+                     value=str(swap_cached.get('size', '0'))),
             KeyValue(key="Cached-Unit", value=str(swap_cached.get('unit', '')))])
     return d_swap
 
 
 def power_status(hardware, total, power):
     """
-    Make a Power diagnostic message
+    Make a Power diagnostic message.
 
     Fields:
     * Two power dictionaries:
@@ -312,12 +301,14 @@ def power_status(hardware, total, power):
     # Make list power
     for watt in sorted(power):
         value = power[watt]
-        watt_name = watt.replace("VDD_", "").replace("POM_", "").replace("_", " ")
-        values += [KeyValue(key="Current Power", value=str(int(value['cur']))), KeyValue(key="Average Power", value=str(int(value['avg'])))]
+        # watt_name = watt.replace("VDD_", "").replace("POM_", "").replace("_", " ")
+        values += [KeyValue(key="Current Power", value=str(int(value['cur']))),
+                   KeyValue(key="Average Power", value=str(int(value['avg'])))]
     # Make voltage diagnostic status
     d_volt = DiagnosticStatus(
         name='jetson_stats power',
-        message='curr={curr}mW avg={avg}mW'.format(curr=int(total['cur']), avg=int(total['avg'])),
+        message='curr={curr}mW avg={avg}mW'.format(
+            curr=int(total['cur']), avg=int(total['avg'])),
         hardware_id=hardware,
         values=values)
     return d_volt
@@ -325,7 +316,7 @@ def power_status(hardware, total, power):
 
 def temp_status(hardware, temp, level_options):
     """
-    Make a temperature diagnostic message
+    Make a temperature diagnostic message.
 
     Fields:
     * All temperatures are in Celsius
@@ -354,7 +345,8 @@ def temp_status(hardware, temp, level_options):
                 # Store name
                 max_temp_names += [key]
         # Write a message
-        message = '[' + ', '.join(max_temp_names) + '] are more than {temp} C'.format(temp=th)
+        message = '[' + ', '.join(max_temp_names) + \
+            '] are more than {temp} C'.format(temp=th)
     else:
         message = '{n_temp} temperatures reads'.format(n_temp=len(temp))
     # Make temperature diagnostic status
@@ -369,7 +361,7 @@ def temp_status(hardware, temp, level_options):
 
 def emc_status(hardware, emc, dgtype):
     """
-    Make a EMC diagnostic message
+    Make a EMC diagnostic message.
 
     Fields:
     * min_freq - Minimum frequency in kHz
@@ -389,4 +381,3 @@ def emc_status(hardware, emc, dgtype):
             KeyValue(key="Unit", value="khz")])
     return d_emc
 # EOF
-
