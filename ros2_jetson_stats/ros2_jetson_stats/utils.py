@@ -205,15 +205,10 @@ def fan_status(hardware, fan, dgtype):
     * rpm - Revolution Per Minute. This number can be 0 if the hardware does not implement this feature
     * mode - Mode selected for your fan
     """
-    ctrl = "Ta" if fan.auto else "Tm"
-    if fan.speed is not None:
-        label = "{ctrl}={target: >3.0f}%".format(ctrl=ctrl, target=fan.speed)
-    else:
-        label = "{ctrl}".format(ctrl=ctrl)
     # Make fan diagnostic status
     d_fan = DiagnosticStatus(
         name='jetson_stats {type} fan'.format(type=dgtype),
-        message='speed={speed}% {label}'.format(speed=fan['measure'], label=label),
+        message='speed={speed}%'.format(speed=fan['speed']),
         hardware_id=hardware,
         values=[
             KeyValue(key='Mode', value=str(fan['mode'])),
