@@ -218,7 +218,6 @@ def fan_status(hardware, fan, dgtype):
         values=[
             KeyValue(key='Mode', value=str(fan['mode'])),
             KeyValue(key="Speed", value=str(fan['speed'])),
-            KeyValue(key="Measure", value=str(fan['measure'])),
             KeyValue(key="Automatic",value=str(fan['auto'])),
             KeyValue(key="RPM", value=str(fan['rpm']))])
     return d_fan
