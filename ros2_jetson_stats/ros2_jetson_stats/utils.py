@@ -201,8 +201,6 @@ def fan_status(hardware, fan, dgtype):
         * True = Automatic speed control enabled
         * False = Automatic speed control disabled
     * speed - Speed set. Value between [0, 100] (float)
-    * measure - Speed measured. Value between [0, 100] (float)
-    * rpm - Revolution Per Minute. This number can be 0 if the hardware does not implement this feature
     * mode - Mode selected for your fan
     """
     # Make fan diagnostic status
@@ -214,7 +212,7 @@ def fan_status(hardware, fan, dgtype):
             KeyValue(key='Mode', value=str(fan['mode'])),
             KeyValue(key="Speed", value=str(fan['speed'])),
             KeyValue(key="Automatic",value=str(fan['auto'])),
-            KeyValue(key="RPM", value=str(fan['rpm']))])
+            ])
     return d_fan
 
 

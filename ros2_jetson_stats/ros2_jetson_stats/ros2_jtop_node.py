@@ -86,7 +86,7 @@ class JTOPPublisher(Node):
             fan_speed = self.jetson.fan.speed
 
         while self.jetson.ok():
-            if self.jetson.fan.measure == fan_speed:
+            if self.jetson.fan.speed == fan_speed:
                 break
 
         resp.set_fan_mode = fan_mode
