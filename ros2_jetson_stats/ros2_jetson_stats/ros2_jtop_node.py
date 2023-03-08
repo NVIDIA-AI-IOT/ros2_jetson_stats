@@ -67,7 +67,7 @@ class JTOPPublisher(Node):
         # Extract board information
         board = self.jetson.board
         # Define hardware name
-        self.hardware = board["info"]["machine"]
+        self.hardware = board["platform"]["Machine"]
         self.board_status = board_status(self.hardware, board, 'board')
         # Set callback
         #self.jetson.attach(self.jetson_callback)
@@ -133,7 +133,7 @@ class JTOPPublisher(Node):
         # Make diagnostic message for each cpu
         self.arr.status += [cpu_status(self.hardware, name, self.jetson.cpu[name]) for name in self.jetson.cpu]
         # Merge all other diagnostics
-        self.arr.status += [gpu_status(self.hardware, self.jetson.gpu)]
+        self.arr.status += [gpu_status(self.hardware, self.jetson.gpu[1])]
         self.arr.status += [ram_status(self.hardware, self.jetson.ram, 'mem')]
         self.arr.status += [swap_status(self.hardware, self.jetson.swap, 'mem')]
         self.arr.status += [emc_status(self.hardware, self.jetson.emc, 'mem')]

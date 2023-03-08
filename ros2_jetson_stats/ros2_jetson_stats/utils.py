@@ -105,7 +105,7 @@ def board_status(hardware, board, dgtype):
     # Make board diagnostic status
     d_board = DiagnosticStatus(
         name='jetson_stats {type} config'.format(type=dgtype),
-        message='Jetpack {jetpack}'.format(jetpack=board['info']['jetpack']),
+        message='Jetpack {jetpack}'.format(jetpack=board['hardware']['Jetpack']),
         hardware_id=hardware,
         values=values)
     return d_board
