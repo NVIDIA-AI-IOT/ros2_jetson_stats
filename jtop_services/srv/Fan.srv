@@ -1,6 +1,6 @@
 # fan selection
 
-string mode
+string mode # quiet or cool
 int64 speed
 ---
 string set_fan_mode
