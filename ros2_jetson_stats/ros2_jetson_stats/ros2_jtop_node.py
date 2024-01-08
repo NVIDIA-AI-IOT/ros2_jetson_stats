@@ -39,21 +39,24 @@ class JTOPPublisher(Node):
 
     def __init__(self):
         super().__init__('jtop_publisher')
-        self.publisher_ = self.create_publisher(DiagnosticArray, 'diagnostics', 1)
+        self.publisher_ = self.create_publisher(
+            DiagnosticArray, 'diagnostics', 1)
         # Create Services
         self.fan_srv = self.create_service(Fan, '/jtop/fan', self.fan_service)
-        self.nvpmodel_srv = self.create_service(NVPModel, '/jtop/nvpmodel', self.nvpmodel_service)
-        self.jetson_clocks_srv = self.create_service(JetsonClocks, '/jtop/jetson_clocks', self.jetson_clocks_service)
-        self.declare_parameter('interval', 0.5) # Default interval 0.5
-        self.declare_parameter('level_error', 60) # Default interval 0.5
-        self.declare_parameter('level_warning', 40) # Default interval 0.5
-        self.declare_parameter('level_ok', 20) # Default interval 0.5
+        self.nvpmodel_srv = self.create_service(
+            NVPModel, '/jtop/nvpmodel', self.nvpmodel_service)
+        self.jetson_clocks_srv = self.create_service(
+            JetsonClocks, '/jtop/jetson_clocks', self.jetson_clocks_service)
+        self.declare_parameter('interval', 0.5)  # Default interval 0.5
+        self.declare_parameter('level_error', 60)  # Default interval 0.5
+        self.declare_parameter('level_warning', 40)  # Default interval 0.5
+        self.declare_parameter('level_ok', 20)  # Default interval 0.5
 
         self.level_options = {
-                self.get_parameter('level_error')._value: DiagnosticStatus.ERROR,
-                self.get_parameter('level_warning')._value: DiagnosticStatus.WARN,
-                self.get_parameter('level_ok')._value: DiagnosticStatus.OK,
-                }
+            self.get_parameter('level_error')._value: DiagnosticStatus.ERROR,
+            self.get_parameter('level_warning')._value: DiagnosticStatus.WARN,
+            self.get_parameter('level_ok')._value: DiagnosticStatus.OK,
+        }
 
         timer_period = self.get_parameter('interval')._value
         self.timer = self.create_timer(timer_period, self.jetson_callback)
@@ -70,19 +73,18 @@ class JTOPPublisher(Node):
         self.hardware = board["platform"]["Machine"]
         self.board_status = board_status(self.hardware, board, 'board')
         # Set callback
-        #self.jetson.attach(self.jetson_callback)
-    
+        # self.jetson.attach(self.jetson_callback)
 
     def fan_service(self, req, resp):
         # Try to set new nvpmodel
         fan_mode = req.mode
         fan_speed = req.speed
         try:
-            self.jetson.fan.mode = fan_mode
+            self.jetson.fan.profile = fan_mode
             self.jetson.fan.speed = fan_speed
         except jtop.JtopException as e:
             # Return same nvp model
-            fan_mode = str(self.jetson.fan.mode)
+            fan_mode = str(self.jetson.fan.profile)
             fan_speed = self.jetson.fan.speed
 
         while self.jetson.ok():
@@ -91,8 +93,9 @@ class JTOPPublisher(Node):
 
         resp.set_fan_mode = fan_mode
         resp.set_fan_speed = fan_speed
-        
-        self.get_logger().info("Incoming Request \n Fan Mode:{}\t Fan Speed:{};\n Current Status of Fan Mode{}\t Fan Speed:{}".format(req.mode, req.speed, resp.set_fan_mode, resp.set_fan_speed))
+
+        self.get_logger().info("Incoming Request \n Fan Mode:{}\t Fan Speed:{};\n Current Status of Fan Mode{}\t Fan Speed:{}".format(
+            req.mode, req.speed, resp.set_fan_mode, resp.set_fan_speed))
 
         return resp
 
@@ -101,13 +104,15 @@ class JTOPPublisher(Node):
         self.jetson.jetson_clocks = req.status
 
         resp.done = req.status
-        self.get_logger().info("Incoming Request \n Jetson Clocks:{};\n Current Status of Jetson Clocks:{}".format(req.status, resp.done))
+        self.get_logger().info(
+            "Incoming Request \n Jetson Clocks:{};\n Current Status of Jetson Clocks:{}".format(req.status, resp.done))
         return resp
 
     def nvpmodel_service(self, req, resp):
         # Try to set new nvpmodel
         cur_nvpmodel = self.jetson.nvpmodel
-        self.get_logger().info("Incoming Request \n NVPModel:{};\n Current:{}".format(req.nvpmodel, cur_nvpmodel))
+        self.get_logger().info("Incoming Request \n NVPModel:{};\n Current:{}".format(
+            req.nvpmodel, cur_nvpmodel))
         nvpmodel = req.nvpmodel
 
         try:
@@ -129,31 +134,38 @@ class JTOPPublisher(Node):
         # Add timestamp
         self.arr.header.stamp = self.get_clock().now().to_msg()
         # Status board and board info
-        self.arr.status = [other_status(self.hardware, self.jetson, jtop.__version__)]
+        self.arr.status = [other_status(
+            self.hardware, self.jetson, jtop.__version__)]
         # Make diagnostic message for each cpu
-        self.arr.status += [cpu_status(self.hardware, name, self.jetson.cpu[name]) for name in self.jetson.cpu]
+        self.arr.status += [cpu_status(self.hardware, name, cpu)
+                            for name, cpu in enumerate(self.jetson.cpu['cpu'])]
+        # Make diagnostic message for each gpu
+        self.arr.status += [gpu_status(self.hardware, name, self.jetson.gpu[name])
+                            for name in self.jetson.gpu]
         # Merge all other diagnostics
-        self.arr.status += [gpu_status(self.hardware, self.jetson.gpu[1])]
-        self.arr.status += [ram_status(self.hardware, self.jetson.ram, 'mem')]
-        self.arr.status += [swap_status(self.hardware, self.jetson.swap, 'mem')]
-        self.arr.status += [emc_status(self.hardware, self.jetson.emc, 'mem')]
+        self.arr.status += [ram_status(self.hardware,
+                                       self.jetson.memory['RAM'], 'mem')]
+        self.arr.status += [swap_status(self.hardware,
+                                        self.jetson.memory['SWAP'], 'mem')]
+        self.arr.status += [emc_status(self.hardware,
+                                       self.jetson.memory['EMC'], 'mem')]
         # Temperature
-        self.arr.status += [temp_status(self.hardware, self.jetson.temperature, self.level_options)]
+        self.arr.status += [temp_status(self.hardware,
+                                        self.jetson.temperature, self.level_options)]
         # Read power
-        total, power = self.jetson.power
-        if power:
-            self.arr.status += [power_status(self.hardware, total, power)]
+        self.arr.status += [power_status(self.hardware, self.jetson.power)]
         # Fan controller
         if self.jetson.fan is not None:
-            self.arr.status += [fan_status(self.hardware, self.jetson.fan, 'board')]
+            self.arr.status += [fan_status(self.hardware, key, value)
+                                for key, value in self.jetson.fan.items()]
         # Status board and board info
         self.arr.status += [self.board_status]
         # Add disk status
-        self.arr.status += [disk_status(self.hardware, self.jetson.disk, 'board')]
+        self.arr.status += [disk_status(self.hardware,
+                                        self.jetson.disk, 'board')]
         # Update status jtop
         # rospy.logdebug("jtop message %s" % rospy.get_time())
         self.publisher_.publish(self.arr)
-
 
 
 def main(args=None):
@@ -173,4 +185,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
